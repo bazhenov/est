@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+import math, hashlib, struct, sys
+import argparse
+
+class LinearCounter:
+
+	def __init__(self, mask_size_bits):
+		assert mask_size_bits > 0
+		self.mask_size_bits = mask_size_bits
+		self.mask = bytearray(int(math.ceil(self.mask_size_bits / 8.0)))
+
+	def offer(self, value):
+		hash = hashlib.md5(str(value)).digest()
+		bit_no = struct.unpack("I", hash[0:4])[0] % self.mask_size_bits
+		byte = bit_no / 8
+		self.mask[byte] |= (1 << (bit_no % 8))
+
+	def estimate(self):
+		population_count = sum([bin(i).count("1") for i in self.mask])
+		if population_count >= self.mask_size_bits:
+			return -1
+		estimate = self.mask_size_bits * math.log(float(self.mask_size_bits) / (self.mask_size_bits - population_count))
+		return int(round(estimate))
+
+if __name__ == '__main__':
+	try:
+		parser = argparse.ArgumentParser(description='Estimates cardinality of the input.')
+		parser.add_argument("-s", type=int, help='size of the binary mask in bits', default=1000000)
+
+		args = parser.parse_args()
+		lc = LinearCounter(args.s)
+		for line in sys.stdin:
+			lc.offer(line)
+		estimate = lc.estimate()
+		if estimate <= 0:
+			parser.exit(2, "Unable to estimate cardinality. Try larger binary mask (-s option)\n")
+		print estimate
+	except KeyboardInterrupt:
+		pass
