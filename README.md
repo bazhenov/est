@@ -15,7 +15,7 @@ Java version 1.6 or higher is required for `est` utility.
 
 Simply run fillowing command in your shell:
 
-  curl -s https://raw.githubusercontent.com/bazhenov/est/master/install.sh | sh
+    curl -s https://raw.githubusercontent.com/bazhenov/est/master/install.sh | sh
 
 `est` programm will be i nstalled in `/usr/local/bin`.
 
@@ -23,26 +23,26 @@ Usage
 =====
 To estimate the number of unique elements:
 
-  $ cat file | est uniq
-  3443
+    $ cat file | est uniq
+    3443
 
  To estimate top k most frequent elements in the stream
 
-  $ cat file | est top
-  3443
+    $ cat file | est top
+    3443
 
 Performance
 ===========
 On file containing 1 million of random numbers from 0 to 32756 `est` is about 30 times faster!
 
-   time cat random.txt | sort | uniq | wc -l
-   32768
-   cat random.txt  0.00s user 0.01s system 0% cpu 14.340 total
-   sort  15.57s user 0.12s system 99% cpu 15.782 total
-   uniq  0.87s user 0.01s system 5% cpu 15.778 total
-   wc -l  0.00s user 0.00s system 0% cpu 15.777 total
+    time cat random.txt | sort | uniq | wc -l
+    32768
+    cat random.txt  0.00s user 0.01s system 0% cpu 14.340 total
+    sort  15.57s user 0.12s system 99% cpu 15.782 total
+    uniq  0.87s user 0.01s system 5% cpu 15.778 total
+    wc -l  0.00s user 0.00s system 0% cpu 15.777 total
 
-   time cat random.txt | est uniq
-   32756
-   cat random.txt  0.00s user 0.01s system 2% cpu 0.425 total
-   est uniq  0.62s user 0.07s system 159% cpu 0.431 total
+    time cat random.txt | est uniq
+    32756
+    cat random.txt  0.00s user 0.01s system 2% cpu 0.425 total
+    est uniq  0.62s user 0.07s system 159% cpu 0.431 total
